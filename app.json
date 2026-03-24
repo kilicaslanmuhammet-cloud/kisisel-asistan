@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "Kişisel Asistan",
+    "slug": "kisisel-asistan",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4A90E2"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.kisiselasistan",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Sesli komut ve toplantı kaydı için mikrofon erişimi gereklidir.",
+        "NSSpeechRecognitionUsageDescription": "Sesli komutları anlamak için konuşma tanıma gereklidir.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Konum bazlı görev optimizasyonu için konum erişimi gereklidir.",
+        "NSLocationWhenInUseUsageDescription": "Yakın yer önerileri için konum erişimi gereklidir."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#4A90E2"
+      },
+      "permissions": [
+        "RECORD_AUDIO",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
+      "package": "com.yourcompany.kisiselasistan"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Konum bazlı görev optimizasyonu için konum erişimi gereklidir.",
+          "locationWhenInUsePermission": "Yakın yer önerileri için konum erişimi gereklidir."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#4A90E2",
+          "defaultChannel": "default"
+        }
+      ]
+    ],
+    "scheme": "kisiselasistan",
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    }
+  }
+}

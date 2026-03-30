@@ -63,6 +63,29 @@ export const Config = {
   },
 };
 
+// Bir anahtarın gerçek değer taşıyıp taşımadığını kontrol eder
+const isSet = (value: string) => !!value && value !== 'placeholder';
+
+// Hangi servislerin aktif olduğunu tek noktadan yönetir
+export const features = {
+  /** Claude AI sohbet, brifing, toplantı analizi */
+  aiChat: isSet(process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY || ''),
+  /** OpenAI Whisper ses-metin dönüşümü */
+  voiceTranscription: isSet(process.env.EXPO_PUBLIC_OPENAI_API_KEY || ''),
+  /** Firebase kimlik doğrulama ve veritabanı */
+  firebase: isSet(process.env.EXPO_PUBLIC_FIREBASE_API_KEY || ''),
+  /** Google OAuth girişi */
+  googleAuth: isSet(process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || ''),
+  /** Hava durumu */
+  weather: isSet(process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY || ''),
+  /** Telegram bildirim botu */
+  telegram: isSet(process.env.EXPO_PUBLIC_TELEGRAM_BOT_TOKEN || ''),
+  /** Google Haritalar */
+  maps: isSet(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || ''),
+  /** Outlook e-posta entegrasyonu */
+  outlook: isSet(process.env.EXPO_PUBLIC_MICROSOFT_CLIENT_ID || ''),
+};
+
 export const APP_VERSION = '1.0.0';
 export const MAX_CONVERSATION_HISTORY = 50;
 export const BRIEFING_HOUR = 7; // 07:00 sabah brifing

@@ -18,6 +18,7 @@ import { useAppStore } from '../../store/appStore';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { VoiceInput } from '../../components/chat/VoiceInput';
 import { sendChatMessage, processVoiceCommand } from '../../services/claude/ai';
+import { features } from '../../constants/config';
 import { ChatMessage } from '../../types';
 import { saveChatMessage, getChatHistory } from '../../services/firebase/firestore';
 import { createTask } from '../../services/firebase/firestore';
@@ -176,6 +177,16 @@ export default function ChatScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={90}
     >
+      {/* Claude AI devre dışı uyarısı */}
+      {!features.aiChat && (
+        <View style={styles.disabledBanner}>
+          <Ionicons name="warning-outline" size={16} color="#f59e0b" />
+          <Text style={styles.disabledBannerText}>
+            Claude AI henüz aktif değil — Anthropic API anahtarı bekleniyor
+          </Text>
+        </View>
+      )}
+
       {/* Üst bar */}
       <View style={styles.header}>
         <View style={styles.headerInfo}>
@@ -242,23 +253,24 @@ export default function ChatScreen() {
         <VoiceInput
           onTranscription={handleVoiceTranscription}
           onError={(error) => Alert.alert('Ses Hatası', error)}
-          disabled={isLoading}
+          disabled={isLoading || !features.aiChat}
         />
         <TextInput
           style={styles.textInput}
           value={inputText}
           onChangeText={setInputText}
-          placeholder="Bir şeyler yazın..."
+          placeholder={features.aiChat ? 'Bir şeyler yazın...' : 'AI henüz kullanılamıyor...'}
           placeholderTextColor={Colors.textMuted}
           multiline
           maxLength={1000}
           returnKeyType="send"
           onSubmitEditing={() => sendMessage(inputText)}
+          editable={features.aiChat}
         />
         <TouchableOpacity
-          style={[styles.sendButton, (!inputText.trim() || isLoading) && styles.sendButtonDisabled]}
+          style={[styles.sendButton, (!inputText.trim() || isLoading || !features.aiChat) && styles.sendButtonDisabled]}
           onPress={() => sendMessage(inputText)}
-          disabled={!inputText.trim() || isLoading}
+          disabled={!inputText.trim() || isLoading || !features.aiChat}
         >
           <Ionicons name="send" size={18} color="#fff" />
         </TouchableOpacity>
@@ -392,5 +404,20 @@ const styles = StyleSheet.create({
   },
   sendButtonDisabled: {
     backgroundColor: Colors.textMuted,
+  },
+  disabledBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(245,158,11,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(245,158,11,0.25)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  disabledBannerText: {
+    fontSize: 12,
+    color: '#f59e0b',
+    flex: 1,
   },
 });

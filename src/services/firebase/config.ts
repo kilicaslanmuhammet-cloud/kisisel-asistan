@@ -8,14 +8,19 @@ let auth: Auth;
 let db: Firestore;
 
 export const initFirebase = () => {
-  if (getApps().length === 0) {
-    app = initializeApp(Config.firebase);
-  } else {
-    app = getApps()[0];
+  try {
+    if (getApps().length === 0) {
+      app = initializeApp(Config.firebase);
+    } else {
+      app = getApps()[0];
+    }
+    auth = getAuth(app);
+    db = getFirestore(app);
+    return { app, auth, db };
+  } catch (error) {
+    console.warn('Firebase başlatılamadı — anahtarlar eksik veya geçersiz:', error);
+    return { app: null, auth: null, db: null };
   }
-  auth = getAuth(app);
-  db = getFirestore(app);
-  return { app, auth, db };
 };
 
 export const getFirebaseAuth = (): Auth => {

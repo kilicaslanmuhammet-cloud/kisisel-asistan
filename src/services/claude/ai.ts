@@ -15,6 +15,12 @@ const client = new Anthropic({
   apiKey: Config.anthropic.apiKey,
 });
 
+const assertClaudeAvailable = () => {
+  if (!Config.anthropic.apiKey || Config.anthropic.apiKey === 'placeholder') {
+    throw new Error('Claude AI henüz yapılandırılmadı. Anthropic API anahtarı bekleniyor.');
+  }
+};
+
 const SYSTEM_PROMPT = `Sen Türkçe konuşan kişisel bir AI asistansın. Kullanıcının günlük hayatını organize etmesine,
 verimliliğini artırmasına ve iş-aile-sosyal yaşam dengesini kurmasına yardım ediyorsun.
 
@@ -45,6 +51,7 @@ export const sendChatMessage = async (
     weather?: WeatherData;
   }
 ): Promise<string> => {
+  assertClaudeAvailable();
   const contextStr = context
     ? `\n\nGüncel bağlam:
 ${context.weather ? `Hava: ${context.weather.description}, ${context.weather.temperature}°C` : ''}
@@ -77,6 +84,7 @@ ${context.events?.length ? `Bugünkü etkinlikler: ${context.events.slice(0, 3).
 export const summarizeAndCategorizeMails = async (
   mails: { subject: string; from: string; body: string; date: string }[]
 ): Promise<{ id: number; summary: string; category: string; importance: string }[]> => {
+  assertClaudeAvailable();
   const mailsText = mails
     .map(
       (m, i) =>
@@ -129,6 +137,7 @@ export const analyzeMeeting = async (
   actionItems: string[];
   openQuestions: string[];
 }> => {
+  assertClaudeAvailable();
   const summaryLength = duration < 30 ? 'kısa (3-4 cümle)' : duration < 60 ? 'orta (1 paragraf)' : 'detaylı (2-3 paragraf)';
 
   const response = await client.messages.create({
@@ -190,6 +199,7 @@ export const generateMorningBriefing = async (data: {
   mails: Mail[];
   userName: string;
 }): Promise<string> => {
+  assertClaudeAvailable();
   const eventsText = data.events
     .slice(0, 5)
     .map((e) => `- ${e.title} (${new Date(e.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })})`)
@@ -255,6 +265,7 @@ export const optimizeDailyPlan = async (data: {
   tips: string[];
   warnings: string[];
 }> => {
+  assertClaudeAvailable();
   const response = await client.messages.create({
     model: Config.anthropic.model,
     max_tokens: 4096,
@@ -306,6 +317,7 @@ export const generateProactiveAdvice = async (data: {
   completionRate: number;
   category: string;
 }): Promise<string> => {
+  assertClaudeAvailable();
   const response = await client.messages.create({
     model: Config.anthropic.model,
     max_tokens: 512,
@@ -337,6 +349,7 @@ export const generateWeeklySummary = async (data: {
   habits: any[];
   userName: string;
 }): Promise<string> => {
+  assertClaudeAvailable();
   const completionRate = data.tasksTotal.length > 0
     ? Math.round((data.tasksCompleted.length / data.tasksTotal.length) * 100)
     : 0;
@@ -385,6 +398,7 @@ export const processVoiceCommand = async (
   data?: any;
   response: string;
 }> => {
+  assertClaudeAvailable();
   const response = await client.messages.create({
     model: Config.anthropic.model,
     max_tokens: 1024,

@@ -32,10 +32,11 @@ export const Config = {
     model: 'claude-opus-4-6',
   },
 
-  // OpenAI Whisper
+  // OpenAI Whisper + Chat
   openai: {
     apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY || '',
     whisperModel: 'whisper-1',
+    chatModel: 'gpt-4o',
   },
 
   // Telegram Bot
@@ -68,8 +69,13 @@ const isSet = (value: string) => !!value && value !== 'placeholder';
 
 // Hangi servislerin aktif olduğunu tek noktadan yönetir
 export const features = {
-  /** Claude AI sohbet, brifing, toplantı analizi */
-  aiChat: isSet(process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY || ''),
+  /** Anthropic Claude ile AI (birincil) */
+  claudeAI: isSet(process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY || ''),
+  /** OpenAI GPT-4 ile AI (yedek) */
+  openaiChat: isSet(process.env.EXPO_PUBLIC_OPENAI_API_KEY || ''),
+  /** Herhangi bir AI sağlayıcısı aktif mi */
+  aiChat: isSet(process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY || '') ||
+          isSet(process.env.EXPO_PUBLIC_OPENAI_API_KEY || ''),
   /** OpenAI Whisper ses-metin dönüşümü */
   voiceTranscription: isSet(process.env.EXPO_PUBLIC_OPENAI_API_KEY || ''),
   /** Firebase kimlik doğrulama ve veritabanı */

@@ -17,7 +17,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useAppStore } from '../../store/appStore';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { VoiceInput } from '../../components/chat/VoiceInput';
-import { sendChatMessage, processVoiceCommand } from '../../services/claude/ai';
+import { sendChatMessage, processVoiceCommand, activeAIProvider } from '../../services/ai';
 import { features } from '../../constants/config';
 import { ChatMessage } from '../../types';
 import { saveChatMessage, getChatHistory } from '../../services/firebase/firestore';
@@ -177,15 +177,22 @@ export default function ChatScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={90}
     >
-      {/* Claude AI devre dışı uyarısı */}
-      {!features.aiChat && (
+      {/* AI sağlayıcı durum banner'ı */}
+      {!features.aiChat ? (
         <View style={styles.disabledBanner}>
           <Ionicons name="warning-outline" size={16} color="#f59e0b" />
           <Text style={styles.disabledBannerText}>
-            Claude AI henüz aktif değil — Anthropic API anahtarı bekleniyor
+            AI henüz aktif değil — Anthropic veya OpenAI anahtarı bekleniyor
           </Text>
         </View>
-      )}
+      ) : !features.claudeAI ? (
+        <View style={styles.fallbackBanner}>
+          <Ionicons name="swap-horizontal-outline" size={16} color="#60a5fa" />
+          <Text style={styles.fallbackBannerText}>
+            Geçici mod: {activeAIProvider()} kullanılıyor — Claude aktif olunca otomatik geçiş yapılır
+          </Text>
+        </View>
+      ) : null}
 
       {/* Üst bar */}
       <View style={styles.header}>
@@ -418,6 +425,21 @@ const styles = StyleSheet.create({
   disabledBannerText: {
     fontSize: 12,
     color: '#f59e0b',
+    flex: 1,
+  },
+  fallbackBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(96,165,250,0.10)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(96,165,250,0.22)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  fallbackBannerText: {
+    fontSize: 12,
+    color: '#60a5fa',
     flex: 1,
   },
 });

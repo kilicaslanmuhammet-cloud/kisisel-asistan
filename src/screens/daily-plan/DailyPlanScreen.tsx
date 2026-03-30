@@ -16,7 +16,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useAppStore } from '../../store/appStore';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
-import { optimizeDailyPlan } from '../../services/claude/ai';
+import { optimizeDailyPlan } from '../../services/ai';
 import { getCurrentLocation, findNearbyPlaces } from '../../services/location/location';
 import { fetchWeather } from '../../services/weather/weather';
 import { format } from 'date-fns';

@@ -18,7 +18,7 @@ import { Card } from '../../components/common/Card';
 import { CategoryBadge } from '../../components/common/CategoryBadge';
 import { fetchGmailMessages } from '../../services/gmail/gmail';
 import { fetchOutlookMessages } from '../../services/outlook/outlook';
-import { summarizeAndCategorizeMails } from '../../services/claude/ai';
+import { summarizeAndCategorizeMails } from '../../services/ai';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 

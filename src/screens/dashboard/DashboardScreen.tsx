@@ -24,7 +24,7 @@ import { fetchWeather } from '../../services/weather/weather';
 import { fetchTodayEvents } from '../../services/calendar/calendar';
 import { fetchGmailMessages } from '../../services/gmail/gmail';
 import { getCurrentLocation } from '../../services/location/location';
-import { generateMorningBriefing } from '../../services/claude/ai';
+import { generateMorningBriefing } from '../../services/ai';
 import { subscribeToTasks } from '../../services/firebase/firestore';
 import { Categories } from '../../constants/categories';
 

@@ -20,7 +20,7 @@ import { Meeting } from '../../types';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { transcribeAudio } from '../../services/whisper/transcription';
-import { analyzeMeeting } from '../../services/claude/ai';
+import { analyzeMeeting } from '../../services/ai';
 import { createMeeting, updateMeeting, getUserMeetings } from '../../services/firebase/firestore';
 import { createTask } from '../../services/firebase/firestore';
 import { sendMeetingSummaryMail } from '../../services/gmail/gmail';
